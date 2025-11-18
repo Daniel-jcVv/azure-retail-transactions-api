@@ -1,0 +1,173 @@
+# Azure credentials and secrets
+*.env
+.env.local
+.env.*.local
+secrets/
+credentials/
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Azure specific
+.azure/
+azure-pipelines.yml.user
+*.publishsettings
+*.azurePubxml
+
+# Connection strings and config files with sensitive data
+appsettings.Development.json
+appsettings.Production.json
+local.settings.json
+config.json
+secrets.json
+
+# Storage account keys
+storage_keys.txt
+account_keys.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# PySpark
+metastore_db/
+derby.log
+spark-warehouse/
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# JetBrains IDEs (PyCharm, IntelliJ)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+# Large data files (don't commit to git)
+data/raw/*
+data/processed/*
+*.parquet
+*.csv
+*.json.gz
+*.avro
+
+# But keep sample/example data
+!data-samples/
+!data-samples/*.json
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Output and cache directories
+output/
+cache/
+.cache/
+tmp/
+temp/
+
+# Test coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# Documentation build
+docs/_build/
+site/
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+
+# Databricks
+.databricks/
+
+# Terraform (if using IaC)
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+
+# ARM templates with parameters
+*.parameters.json
+*.parameters.*.json
+
+# Local development notes
+NOTES.md
+TODO.md
+SCRATCH.md
+context/
+
+# Personal or WIP files
+WIP/
+drafts/
+personal/
+
+
