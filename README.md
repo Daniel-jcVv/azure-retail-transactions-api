@@ -128,12 +128,9 @@ See [docs/setup-guide.md](docs/setup-guide.md) for detailed instructions.
 - [Portfolio Website](your-website)
 - [Architecture Diagram](docs/architecture-diagram.png)
 
-## 📄 License
-
-This project is part of my professional portfolio.
 
 ---
 
-**Developed by**: [Your Name]
+**Developed by**: 
 **Date**: November 2025
-**Contact**: [your-email]
+**Contact**: 

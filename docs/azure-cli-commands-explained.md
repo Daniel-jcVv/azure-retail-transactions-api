@@ -161,7 +161,6 @@ az storage account create \
 - ✅ Atomic operations on directories
 - ❌ Without it, only flat blob storage (no real folders)
 
-**Time to create:** ~30-60 seconds
 
 ---
 
@@ -197,12 +196,7 @@ az synapse workspace create \
 | `--sql-admin-login-password` | `RetailProject2025!` | Admin password (must be complex) |
 | `--location` | `centralus` | Region for the workspace |
 
-**Password Requirements:**
-- ✅ Minimum 8 characters
-- ✅ Contains uppercase letter
-- ✅ Contains lowercase letter
-- ✅ Contains number
-- ✅ Contains special character
+
 
 **What gets created automatically:**
 - 🔹 Synapse Workspace
@@ -316,8 +310,8 @@ STORAGE_KEY=$(az storage account keys list \
 | `STORAGE_KEY=` | Stores the key in environment variable |
 
 **Why we need the key:**
-- 🔑 Authentication to perform operations on storage account
-- 🔐 Alternative: Use `--auth-mode login` (uses your Azure identity)
+- Authentication to perform operations on storage account
+- Alternative: Use `--auth-mode login` (uses your Azure identity)
 
 ### Step 2: Create Containers
 
@@ -340,9 +334,9 @@ az storage container create \
 
 | Container | Purpose | Data Quality |
 |-----------|---------|--------------|
-| 🥉 **bronze** | Raw data from API (no transformations) | Low (as-is) |
-| 🥈 **silver** | Cleaned, filtered data (purchases only) | Medium (validated) |
-| 🥇 **gold** | Aggregated business metrics (daily reports) | High (ready for consumption) |
+|  **bronze** | Raw data from API (no transformations) | Low (as-is) |
+|  **silver** | Cleaned, filtered data (purchases only) | Medium (validated) |
+|  **gold** | Aggregated business metrics (daily reports) | High (ready for consumption) |
 
 **Container vs Blob vs File System:**
 - **Container** = Top-level folder in storage account
@@ -399,10 +393,10 @@ az synapse spark pool create \
 - Spark requires at least 1 driver + 2 workers
 
 **Auto-pause explained:**
-- ✅ Saves money: Pauses when not in use
-- ✅ Automatic: No manual intervention needed
-- ✅ Fast resume: Starts in ~2-3 minutes when needed
-- 💰 Cost: Only pay when running (not when paused)
+-  Saves money: Pauses when not in use
+-  Automatic: No manual intervention needed
+-  Fast resume: Starts in ~2-3 minutes when needed
+-  Cost: Only pay when running (not when paused)
 
 **Example cost calculation (Small nodes):**
 - Cost: ~$0.50/hour when running
@@ -432,7 +426,7 @@ az synapse spark pool create \
 
 ---
 
-## 🔍 Verification Commands
+## Verification Commands
 
 After setup, verify everything was created:
 
@@ -462,7 +456,7 @@ az synapse spark pool show \
 
 ---
 
-## 🗑️ Cleanup Commands
+## Cleanup Commands
 
 When you're done with the project:
 
@@ -480,7 +474,7 @@ az group exists --name $RESOURCE_GROUP
 
 ---
 
-## 💡 Pro Tips
+##  Pro Tips
 
 ### 1. Save Configuration
 
@@ -493,7 +487,7 @@ STORAGE_ACCOUNT="$STORAGE_ACCOUNT"
 SYNAPSE_WORKSPACE="$SYNAPSE_WORKSPACE"
 LOCATION="$LOCATION"
 SQL_ADMIN_USER="sqladminuser"
-SQL_ADMIN_PASSWORD="RetailProject2025!"
+SQL_ADMIN_PASSWORD="Password123!"
 EOF
 ```
 
@@ -526,7 +520,7 @@ az synapse spark pool update \
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Azure CLI Documentation](https://docs.microsoft.com/cli/azure/)
 - [Azure Synapse Documentation](https://docs.microsoft.com/azure/synapse-analytics/)
