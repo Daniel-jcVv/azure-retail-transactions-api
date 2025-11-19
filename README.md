@@ -1,136 +1,129 @@
-# Retail Data Analytics Pipeline - Azure Data Engineering Project
+# Azure Retail Analytics Pipeline - Medallion Architecture
 
-## 🎯 Project Overview
+[![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/)
+[![Synapse Analytics](https://img.shields.io/badge/Synapse-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/en-us/services/synapse-analytics/)
+[![PySpark](https://img.shields.io/badge/PySpark-E25A1C?style=for-the-badge&logo=apache-spark&logoColor=white)](https://spark.apache.org/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
-End-to-end data engineering pipeline built on Azure that processes retail transactions to generate daily purchase and revenue reports, implementing the **Medallion Architecture** (Bronze-Silver-Gold).
+End-to-end data pipeline implementing **Medallion Architecture** (Bronze-Silver-Gold) on Azure. Processes retail transactions from REST API to analytics-ready data using Synapse Analytics, ADLS Gen2, and PySpark.
 
-## 🏗️ Architecture
+## Architecture
 
-```
-REST API → ADF → ADLS (Bronze) → PySpark (Silver) → Aggregation (Gold) → Synapse SQL → Power BI/Reports
-```
+![Synapse Workspace](docs/screenshots/synapse_analytics.png)
+*Synapse Analytics workspace with Spark Pool and Serverless SQL Pool*
 
-### Data Layers (Medallion Architecture)
+**Data Flow**: `GitHub API → Pipeline → Bronze → PySpark → Silver → Aggregation → Gold → SQL Analytics`
 
-- **🥉 Bronze (Raw Data)**: Raw data from REST API with no transformations
-- **🥈 Silver (Cleaned Data)**: Cleaned, filtered and validated data (purchase transactions only)
-- **🥇 Gold (Aggregated Data)**: Aggregated data ready for consumption (daily reports)
+**Layers**:
+- **Bronze (Raw)**: JSON ingestion from GitHub REST API
+- **Silver (Cleaned)**: Filter purchases, remove nulls, standardize types
+- **Gold (Aggregated)**: Daily revenue and transaction metrics
 
-## 🛠️ Technology Stack
+## Implementation
 
-- **Azure Data Factory (ADF)**: Data orchestration and ingestion
-- **Azure Data Lake Storage Gen2 (ADLS)**: Layered data storage
-- **Azure Synapse Analytics**: PySpark processing and SQL Analytics
-- **PySpark**: Data transformation and cleansing
-- **Azure Synapse SQL Pool**: Queries and reporting
-- **Python**: Processing scripts
-- **Azure Key Vault**: Secrets management (optional)
+![Resource Group](docs/screenshots/resource_group.png)
+*Azure resources: ADLS Gen2 Storage, Synapse Workspace, Spark Pool*
 
-## 📊 Business Use Case
+### Bronze → Silver Transformation
 
-**Client**: Retail Company
-**Requirement**: Automated daily reports showing:
-- Total purchases made
-- Daily revenue generated
-- Transaction trend analysis
+![Bronze Data](docs/screenshots/df_bronze.png)
+*Raw transactions (1,000 records)*
 
-## 🚀 Pipeline Components
+![Silver Data](docs/screenshots/df_silver.png)
+*Cleaned purchase transactions (500 records)*
 
-### 1. Data Ingestion (Bronze Layer)
-- Source: REST API with transactions
-- Frequency: Daily
-- Captured fields:
-  - `customer_id`
-  - `order_id`
-  - `transaction_amount`
-  - `transaction_type`
-  - `transaction_date`
-  - `product_id`
+**PySpark transformations**: Filter by event type, drop nulls, convert dates, standardize payment methods, type casting
 
-### 2. Transformation (Silver Layer)
-- Data cleansing:
-  - Null value removal
-  - Data type validation
-  - Transaction filtering (purchases only)
-- Format standardization
-- Deduplication
+### Silver → Gold Aggregation
 
-### 3. Aggregation (Gold Layer)
-- Calculated metrics:
-  - Total purchases per day
-  - Total revenue per day
-  - Unique transaction count
-  - Unique customers per day
-
-## 📁 Project Structure
-
-```
-az-RetailDataAnalyticsPipeline/
-├── README.md
-├── docs/
-│   ├── architecture-diagram.png
-│   ├── setup-guide.md
-│   └── api-documentation.md
-├── adf/
-│   ├── pipelines/
-│   └── datasets/
-├── synapse/
-│   ├── notebooks/
-│   │   ├── bronze-to-silver.ipynb
-│   │   └── silver-to-gold.ipynb
-│   ├── sql-scripts/
-│   │   └── create-gold-tables.sql
-│   └── spark-jobs/
-├── scripts/
-│   ├── setup-infrastructure.sh
-│   └── generate-sample-data.py
-├── data-samples/
-│   └── sample-transactions.json
-└── tests/
-    └── unit-tests/
+```python
+df_daily_revenue = df_silver.groupBy("event_date").agg(
+    sum("amount").alias("daily_revenue"),
+    count("*").alias("total_purchases")
+)
 ```
 
-## 🔧 Pre-requisites
+### SQL Analytics
 
-- Active Azure subscription
-- Azure CLI installed
-- Python 3.8+
-- Basic knowledge of:
-  - PySpark
-  - SQL
-  - Azure Portal
+![SQL Results](docs/screenshots/SQL_query_results.png)
+*Serverless SQL Pool querying Gold layer with calculated metrics*
 
-## 📦 Installation and Setup
+## Tech Stack
 
-See [docs/setup-guide.md](docs/setup-guide.md) for detailed instructions.
+| Component | Technology |
+|-----------|-----------|
+| Orchestration | Azure Synapse Pipeline |
+| Storage | Azure Data Lake Storage Gen2 |
+| Processing | Apache Spark 3.3 (PySpark) |
+| Analytics | Synapse Serverless SQL Pool |
+| IaC | Azure CLI (Bash) |
+| Format | Parquet |
 
-## 🎓 Skills Demonstrated
+## Quick Start
 
-- ✅ Data Lake architecture design and implementation
-- ✅ ETL/ELT pipeline development
-- ✅ PySpark for distributed processing
-- ✅ Azure Data Factory orchestration
-- ✅ Data quality and validation
-- ✅ SQL analytics and reporting
-- ✅ Medallion Architecture implementation
-- ✅ Cloud cost optimization
+```bash
+# Clone and setup
+git clone https://github.com/Daniel-jcVv/az-RetailDataAnalyticsPipeline.git
+cd az-RetailDataAnalyticsPipeline
 
-## 📈 Expected Results
+# Login to Azure
+az login
 
-- Automated pipeline running daily
-- Reporting time reduced from 4 hours to 30 minutes
-- Data available for near-real-time analysis
-- Scalability to process millions of transactions
+# Deploy infrastructure
+chmod +x scripts/create-azure-resources.sh
+./scripts/create-azure-resources.sh
 
-## 🔗 Links
+# Verify deployment
+./scripts/verify-resources.sh
 
-- [LinkedIn Profile](your-linkedin)
-- [Portfolio Website](your-website)
-- [Architecture Diagram](docs/architecture-diagram.png)
+# Execute notebooks in Synapse Studio
+# 1. 01_bronze_to_silver.ipynb
+# 2. 02_silver_to_gold.ipynb
 
+# Query Gold layer
+# Run synapse/sql-scripts/create_external_tables.sql in Serverless SQL Pool
+
+# Cleanup
+./scripts/delete-resources.sh
+```
+
+## Skills Demonstrated
+
+- Medallion Architecture (Bronze-Silver-Gold)
+- Azure Synapse Analytics configuration
+- PySpark distributed processing
+- ADLS Gen2 hierarchical namespace
+- Synapse Pipeline orchestration
+- Serverless SQL Pool analytics
+- Infrastructure as Code (Azure CLI)
+- Parquet columnar optimization
+
+## Documentation
+
+- [Azure CLI Commands Explained](docs/azure-cli-commands-explained.md)
+- [Implementation Guide](IMPLEMENTATION_GUIDE.md)
+- [Project Checklist](PROJECT_CHECKLIST.md)
 
 ---
 
-**Developed by**: 
-**Date**: November 2025
-**Contact**: 
+## 👤 Author
+
+**Daniel Garcia Belman**
+Data Engineer | Big Data
+- Email: danielgb331@outlook.com
+- GitHub: [@Daniel-jcVv](https://github.com/Daniel-jcVv/Daniel-jcVv)
+- LinkedIn: [My LinkenIn Profile](www.linkedin.com/in/daniel-garcía-belman-99a298aa)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+>
+>**Ora et labora, ahora**
+>
+>**Soli Deo gloria**
